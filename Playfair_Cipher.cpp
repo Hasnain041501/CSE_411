@@ -3,32 +3,32 @@
 using namespace std;
 
 int arr[4];
-string plaintext,ciphertext;
 char KeyTable[5][5]={{'h','a','s','n','i'},
                     {'b','c','d','e','f'},
                     {'g','y','k','l','m'},
                     {'o','p','q','r','z'},
                     {'t','u','v','w','x'}};
 
+string plaintext,ciphertext;
 
-string LowerCase(string str)
+void LowerCase(string& str)
 {
     int i=0;
     for(auto x:str){
 
           str.at(i++)=(char)tolower(x);
     }
-  return str;
+    cout<<"Lowercase text : "<<str<<endl;
 }
 
-void Prepare()
+void Prepare(string& plaintext)
 {
     int len=plaintext.length();
     if((len%2) != 0)
     {
-        plaintext.at(len++)='x';
-        plaintext.at(len)='\0';
+        plaintext.append("x");
     }
+    cout<<"Pair format : "<<plaintext<<endl;
 }
 
 void Search(char a, char b)
@@ -52,22 +52,19 @@ void Search(char a, char b)
             }
         }
     }
-
-    cout<<arr[0]<<arr[1]<<arr[2]<<arr[3]<<endl;
 }
 
 int mod5(int num){ return num%5; }
 
-void Encrypt(string plaintext)
+void Encrypt(string& plaintext)
 {
-    cout<<"Encrypted Text -> "<<ciphertext<<endl;
-    for(int i=0; i<plaintext.length()-1; i+=2)
+    for(int i=0; i<plaintext.length(); i+=2)
     {
         Search(plaintext[i],plaintext[i+1]);
 
         if(arr[0]==arr[2])
         {
-            
+
             ciphertext.push_back(KeyTable[arr[0]][mod5(arr[1]+1)]);
             ciphertext.push_back(KeyTable[arr[0]][mod5(arr[3]+1)]);
         }
@@ -80,28 +77,24 @@ void Encrypt(string plaintext)
             ciphertext.push_back(KeyTable[arr[0]][arr[3]]);
             ciphertext.push_back(KeyTable[arr[2]][arr[1]]);
         }
-
-        cout<<"Encrypted Text -> "<<ciphertext<<endl;
-
     }
-
-
 }
 
 void PlayfairCipher()
 {
+    cout<<"Enter text : ";
+    cin>>plaintext;
+
+    Prepare(plaintext);
+    LowerCase(plaintext);
     Encrypt(plaintext);
 
+    cout<<"Encrypted Text -> "<<ciphertext<<endl;
 }
 
 int main()
 {
-    cout<<"Enter text : ";
-    cin>>plaintext;
-
     PlayfairCipher();
-
-
 
     return 0;
 }
